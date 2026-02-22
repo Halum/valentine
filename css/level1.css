@@ -1,0 +1,227 @@
+/* Background gradient with subtle shimmer */
+.level1-background {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-background);
+  background: linear-gradient(
+    135deg,
+    #ffeef8 0%,
+    #ffe0f0 30%,
+    #ffd4eb 50%,
+    #ffe0f0 70%,
+    #ffeef8 100%
+  );
+  background-size: 200% 200%;
+  animation: shimmerBg 12s ease-in-out infinite;
+}
+
+@keyframes shimmerBg {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Fog canvas */
+#fog-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-canvas);
+  pointer-events: none;
+  touch-action: none;
+}
+
+/* Interaction overlay */
+#sparkle-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-overlay);
+  pointer-events: auto;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+/* Sparkle hitbox */
+.sparkle-hitbox {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  cursor: pointer;
+  z-index: var(--z-sparkle);
+  border: 2px solid rgba(253, 121, 168, 0.3);
+  background: radial-gradient(circle, rgba(253, 121, 168, 0.2) 0%, transparent 70%);
+  box-shadow: 0 0 12px rgba(253, 121, 168, 0.3);
+  animation: idleSparkle 2.5s ease-in-out infinite;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), opacity var(--transition-normal), width 0.4s ease-out, height 0.4s ease-out;
+  opacity: 0;
+}
+
+.sparkle-hitbox.revealed {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@keyframes idleSparkle {
+  0%, 100% { box-shadow: 0 0 10px rgba(253, 121, 168, 0.3); transform: translate(-50%, -50%) scale(1); }
+  50% { box-shadow: 0 0 20px rgba(253, 121, 168, 0.5); transform: translate(-50%, -50%) scale(1.08); }
+}
+
+.sparkle-hitbox:not(.sparkle-found):hover {
+  border-color: rgba(253, 121, 168, 0.6);
+  box-shadow: 0 0 25px rgba(253, 121, 168, 0.5);
+}
+
+/* Sparkle photo (hidden by default, revealed on found) */
+.sparkle-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  pointer-events: none;
+}
+
+.sparkle-found .sparkle-photo {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Found sparkle state */
+.sparkle-found {
+  pointer-events: none;
+  width: 100px;
+  height: 100px;
+  border-color: var(--color-accent-light);
+  box-shadow: 0 0 20px var(--color-sparkle-glow), 0 0 40px rgba(253, 121, 168, 0.3);
+  animation: sparkleGlow 2s ease-in-out infinite;
+  transition: width 0.4s ease-out, height 0.4s ease-out, border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+@keyframes sparkleGlow {
+  0%, 100% { box-shadow: 0 0 20px var(--color-sparkle-glow), 0 0 40px rgba(253, 121, 168, 0.3); }
+  50% { box-shadow: 0 0 30px var(--color-sparkle-glow), 0 0 60px rgba(253, 121, 168, 0.4); }
+}
+
+.sparkle-label {
+  position: absolute;
+  top: 110%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--color-text);
+  white-space: nowrap;
+  text-shadow: 0 1px 4px rgba(231, 84, 128, 0.4);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  .sparkle-label {
+    white-space: normal;
+    max-width: 110px;
+    text-align: center;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+  }
+
+  /* Prevent labels from going off-screen on left/right edges */
+  .sparkle-hitbox {
+    --label-shift: 0px;
+  }
+}
+
+.sparkle-found .sparkle-label {
+  opacity: 1;
+}
+
+/* Heart burst animation */
+.heart {
+  position: absolute;
+  z-index: var(--z-hearts);
+  font-size: 1.2rem;
+  pointer-events: none;
+  animation: heartBurst 1.2s ease-out forwards;
+}
+
+@keyframes heartBurst {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  30% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--drift-x, 0px)), calc(-50% - 80px)) scale(0.6);
+  }
+}
+
+/* CTA button */
+.cta-button {
+  position: fixed;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--z-cta);
+  padding: 0.9rem 2.5rem;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: #fff;
+  background: var(--color-cta-bg);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50px;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 20px rgba(232, 67, 147, 0.3);
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.cta-button:hover {
+  box-shadow: 0 6px 30px rgba(232, 67, 147, 0.5);
+  transform: translateX(-50%) scale(1.03);
+}
+
+.cta-button.fade-in {
+  animation: ctaFadeIn var(--transition-glacial) ease-out forwards;
+}
+
+@keyframes ctaFadeIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+  to { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .sparkle-hitbox {
+    width: 50px;
+    height: 50px;
+  }
+
+  .sparkle-found {
+    width: 80px;
+    height: 80px;
+  }
+
+  .sparkle-label {
+    font-size: 0.65rem;
+  }
+
+  .cta-button {
+    bottom: 1.5rem;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+  }
+}
+
+/* Sparkle hint shimmer — shows after inactivity */

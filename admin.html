@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-jsoneditor@0.23.8/themes/jse-theme-dark.css" crossorigin="anonymous">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #1a1a2e; color: #e0e0e0; min-height: 100vh; }
+
+    .header { background: #16213e; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #0f3460; }
+    .header h1 { font-size: 1.3rem; color: #e94560; }
+    .header a { color: #a0a0c0; text-decoration: none; font-size: 0.85rem; }
+
+    .tabs { display: flex; background: #16213e; border-bottom: 2px solid #0f3460; }
+    .tab { padding: 12px 24px; cursor: pointer; color: #a0a0c0; border-bottom: 2px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+    .tab:hover { color: #e0e0e0; }
+    .tab.active { color: #e94560; border-bottom-color: #e94560; }
+
+    .panel { display: none; padding: 24px; max-width: 1200px; margin: 0 auto; }
+    .panel.active { display: block; }
+
+    #jsoneditor-container { height: 60vh; border: 1px solid #0f3460; border-radius: 8px; overflow: hidden; }
+
+    .toolbar { display: flex; gap: 12px; margin-bottom: 16px; align-items: center; }
+    .btn { padding: 8px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: background 0.2s; }
+    .btn-primary { background: #e94560; color: #fff; }
+    .btn-primary:hover { background: #c73652; }
+    .btn-secondary { background: #0f3460; color: #e0e0e0; }
+    .btn-secondary:hover { background: #1a4a7a; }
+    .btn-danger { background: #6b2030; color: #e0e0e0; }
+    .btn-danger:hover { background: #8b2a3a; }
+
+    .toast { position: fixed; bottom: 24px; right: 24px; padding: 12px 24px; border-radius: 8px; color: #fff; font-size: 0.9rem; z-index: 1000; opacity: 0; transition: opacity 0.3s; }
+    .toast.show { opacity: 1; }
+    .toast.success { background: #2d6a4f; }
+    .toast.error { background: #9b2226; }
+
+    .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-top: 16px; }
+    .photo-card { background: #16213e; border: 1px solid #0f3460; border-radius: 8px; overflow: hidden; }
+    .photo-card img, .photo-card .placeholder { width: 100%; height: 150px; object-fit: cover; display: block; }
+    .photo-card .placeholder { background: #0f3460; display: flex; align-items: center; justify-content: center; color: #555; font-size: 2rem; }
+    .photo-card .info { padding: 10px; font-size: 0.8rem; }
+    .photo-card .info .name { color: #e94560; font-weight: 500; margin-bottom: 4px; word-break: break-all; }
+    .photo-card .info .pair { color: #a0a0c0; margin-bottom: 8px; }
+    .photo-card .actions { display: flex; gap: 6px; }
+    .photo-card .actions .btn { padding: 4px 10px; font-size: 0.75rem; }
+
+    .upload-area { background: #16213e; border: 2px dashed #0f3460; border-radius: 8px; padding: 24px; text-align: center; margin-bottom: 16px; }
+    .upload-area input[type="file"] { display: none; }
+    .upload-area label { cursor: pointer; color: #e94560; }
+    .upload-preview { margin-top: 12px; }
+    .upload-preview img { max-height: 120px; border-radius: 6px; }
+    .upload-controls { display: flex; gap: 12px; margin-top: 12px; align-items: center; flex-wrap: wrap; }
+    .upload-controls input[type="text"] { background: #0f3460; border: 1px solid #1a4a7a; color: #e0e0e0; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; }
+    .upload-controls select { background: #0f3460; border: 1px solid #1a4a7a; color: #e0e0e0; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; }
+
+    .level-select { margin-bottom: 16px; }
+    .level-select label { margin-right: 8px; color: #a0a0c0; }
+
+    .log-filter { background: #0f3460; border: 1px solid #1a4a7a; color: #e0e0e0; padding: 6px 12px; border-radius: 6px; font-size: 0.85rem; }
+    .log-table-wrap { overflow-x: auto; margin-top: 12px; max-height: 70vh; overflow-y: auto; }
+    .log-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    .log-table th { background: #0f3460; color: #e94560; padding: 8px 10px; text-align: left; position: sticky; top: 0; }
+    .log-table td { padding: 6px 10px; border-bottom: 1px solid #0f3460; color: #c0c0d0; white-space: nowrap; }
+    .log-table tr:hover td { background: #16213e; }
+    .log-table .details { max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .log-table .session { font-family: monospace; font-size: 0.7rem; color: #888; max-width: 80px; overflow: hidden; text-overflow: ellipsis; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Admin Panel</h1>
+    <a href="/">&larr; Back to site</a>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="editor">JSON Editor</div>
+    <div class="tab" data-tab="photos">Photo Manager</div>
+    <div class="tab" data-tab="logs">Logs</div>
+  </div>
+
+  <div id="panel-editor" class="panel active">
+    <div class="toolbar">
+      <button class="btn btn-primary" id="btn-save">Save (Ctrl+S)</button>
+      <button class="btn btn-secondary" id="btn-reload">Reload</button>
+      <span id="save-status" style="color:#a0a0c0; font-size:0.85rem;"></span>
+    </div>
+    <div id="jsoneditor-container"></div>
+  </div>
+
+  <div id="panel-photos" class="panel">
+    <div class="level-select">
+      <label for="photo-level">Level:</label>
+      <select id="photo-level">
+        <option value="level1">Level 1</option>
+        <option value="level2" selected>Level 2</option>
+        <option value="level3">Level 3</option>
+      </select>
+    </div>
+
+    <div class="upload-area" id="upload-area">
+      <input type="file" id="file-input" accept="image/*">
+      <label for="file-input">Click to choose a photo or drag &amp; drop</label>
+      <div class="upload-preview" id="upload-preview" hidden></div>
+      <div class="upload-controls" id="upload-controls" hidden>
+        <label style="color:#a0a0c0">Pair:</label>
+        <select id="upload-pair"></select>
+        <input type="text" id="upload-filename" placeholder="filename.jpg">
+        <button class="btn btn-primary" id="btn-upload">Upload</button>
+      </div>
+    </div>
+
+    <div class="photo-grid" id="photo-grid"></div>
+  </div>
+
+  <div id="panel-logs" class="panel">
+    <div class="toolbar">
+      <label style="color:#a0a0c0; margin-right:8px;">Filter:</label>
+      <select id="log-filter-event" class="log-filter">
+        <option value="">All events</option>
+      </select>
+      <input type="text" id="log-filter-session" class="log-filter" placeholder="Session ID...">
+      <input type="text" id="log-filter-ip" class="log-filter" placeholder="IP...">
+      <label style="color:#a0a0c0; margin-left:12px;">
+        <input type="checkbox" id="log-auto-refresh"> Auto-refresh
+      </label>
+      <button class="btn btn-secondary" id="btn-refresh-logs">Refresh</button>
+      <button class="btn btn-secondary" id="btn-download-logs">Download</button>
+    </div>
+    <div class="log-table-wrap">
+      <table class="log-table" id="log-table">
+        <thead>
+          <tr><th>Time</th><th>IP</th><th>Event</th><th>Details</th><th>Browser</th><th>Device</th><th>Session</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script type="module" src="js/admin-panel.js"></script>
+</body>
+</html>

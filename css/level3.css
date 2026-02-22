@@ -1,0 +1,400 @@
+/* Level 3: The Grand Reveal */
+
+.level3-background {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #fff0f5, #ffd6e7, #ffe0f0);
+  z-index: var(--z-background);
+}
+
+#level-3 {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  z-index: var(--z-ui);
+}
+
+.level3-title {
+  position: absolute;
+  top: 1rem;
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  color: var(--color-text);
+  text-shadow: 0 2px 10px rgba(231, 84, 128, 0.5);
+  z-index: var(--z-cta);
+  pointer-events: none;
+}
+
+.level3-subtitle {
+  position: absolute;
+  top: 3.2rem;
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  z-index: var(--z-cta);
+  pointer-events: none;
+}
+
+.level3-progress {
+  position: absolute;
+  top: 5rem;
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--color-accent-light);
+  z-index: var(--z-cta);
+  pointer-events: none;
+}
+
+/* Heart outline SVG */
+.heart-outline-svg {
+  position: absolute;
+  top: 10%;
+  left: 15%;
+  width: 70%;
+  height: 75%;
+  z-index: var(--z-overlay);
+  pointer-events: none;
+}
+
+.heart-segment {
+  stroke: rgba(240, 98, 146, 0);
+  transition: stroke 0.8s ease, filter 0.8s ease;
+}
+
+.heart-segment.revealed {
+  stroke: #e91e8c;
+  filter: drop-shadow(0 0 6px #ff4d94);
+}
+
+@keyframes heartOutlineGlow {
+  0%, 100% {
+    stroke: #ff4d94;
+    stroke-width: 1.8;
+    filter: drop-shadow(0 0 8px #ff4d94);
+  }
+  50% {
+    stroke: #ff6ba6;
+    stroke-width: 2.4;
+    filter: drop-shadow(0 0 14px #ff4d94);
+  }
+}
+
+.heart-outline-svg.complete .heart-segment {
+  animation: heartOutlineGlow 2s ease-in-out infinite;
+}
+
+/* Floating keywords */
+.floating-word {
+  position: absolute;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  color: var(--color-text);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  background: rgba(231, 84, 128, 0.3);
+  border: 1px solid var(--color-primary-light);
+  text-shadow: 0 0 8px var(--color-sparkle-glow);
+  z-index: var(--z-overlay);
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  transition: background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.word-text {
+  filter: blur(8px);
+  transition: filter 0.3s ease;
+}
+
+.floating-word:hover {
+  background: rgba(231, 84, 128, 0.5);
+  box-shadow: 0 0 15px var(--color-sparkle-glow);
+}
+
+/* When captured: strip the box, become bare word-cloud text */
+.floating-word.captured {
+  z-index: var(--z-sparkle);
+  transition: left 1s ease-in-out, top 1s ease-in-out, font-size 0.5s ease,
+              background 0.5s ease, border-color 0.5s ease,
+              padding 0.5s ease, border-radius 0.5s ease;
+  background: transparent;
+  border-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  font-weight: bold;
+  color: #ad1457;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.8), 0 0 12px rgba(240, 98, 146, 0.4);
+}
+
+.floating-word.captured .click-badge {
+  display: none;
+}
+
+.floating-word.locked {
+  pointer-events: none;
+  cursor: default;
+}
+
+/* Glow pulse on completed heart */
+@keyframes wordGlow {
+  0%, 100% {
+    color: #ad1457;
+    text-shadow: 0 0 6px #ff4d94, 0 0 18px rgba(233, 30, 140, 0.5);
+  }
+  50% {
+    color: #d81b60;
+    text-shadow: 0 0 10px #ff4d94, 0 0 28px rgba(233, 30, 140, 0.6);
+  }
+}
+
+.floating-word.glowing {
+  animation: wordGlow 2s ease-in-out infinite;
+}
+
+/* Click badge */
+.click-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: white;
+  font-size: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: sans-serif;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.floating-word.clicked .click-badge {
+  opacity: 1;
+}
+
+/* Admin mode: always show badges */
+.admin-mode .click-badge {
+  opacity: 1;
+}
+
+/* Gift box */
+.gift-box-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: var(--z-cta);
+  opacity: 0;
+  transition: opacity 1s ease;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: max-content;
+  min-width: 250px;
+}
+
+.gift-box-container.visible {
+  opacity: 1;
+}
+
+.gift-box {
+  position: relative;
+  width: 140px;
+  height: 120px;
+  flex-shrink: 0;
+}
+
+.gift-body {
+  position: absolute;
+  bottom: 0;
+  width: 140px;
+  height: 90px;
+  background: linear-gradient(135deg, var(--color-accent), var(--color-primary));
+  border-radius: 8px;
+  box-shadow: 0 8px 30px rgba(240, 98, 146, 0.5);
+}
+
+.gift-ribbon-v {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 16px;
+  height: 100%;
+  background: var(--color-warm);
+  transform: translateX(-50%);
+}
+
+.gift-ribbon-h {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 16px;
+  background: var(--color-warm);
+  transform: translateY(-50%);
+}
+
+.gift-lid {
+  position: absolute;
+  top: 0;
+  left: -8px;
+  width: 156px;
+  height: 35px;
+  background: linear-gradient(135deg, var(--color-accent-light), var(--color-primary-light));
+  border-radius: 6px;
+  transform-origin: right bottom;
+  transition: transform 1.5s ease;
+  box-shadow: 0 -2px 15px rgba(240, 98, 146, 0.3);
+}
+
+.gift-lid-ribbon {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 16px;
+  height: 100%;
+  background: var(--color-warm);
+  transform: translateX(-50%);
+}
+
+.gift-box-container.open .gift-lid {
+  transform: rotate(-110deg);
+}
+
+/* Sparkles from gift */
+@keyframes sparkleRise {
+  0% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-100px) scale(0.5); }
+}
+
+.gift-sparkle {
+  position: absolute;
+  font-size: 1.5rem;
+  animation: sparkleRise 2s ease-out forwards;
+  pointer-events: none;
+}
+
+/* Gift message */
+.gift-message {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: var(--color-text);
+  opacity: 0;
+  transition: opacity 1s ease;
+  white-space: nowrap;
+}
+
+.gift-message.visible {
+  opacity: 1;
+}
+
+/* Start Over button */
+#level3-restart {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.9rem 2rem;
+  border: none;
+  border-radius: 30px;
+  background: var(--color-cta-bg);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(240, 98, 146, 0.4);
+  z-index: var(--z-cta);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-normal), transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+#level3-restart.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#level3-restart:hover {
+  transform: translateX(-50%) scale(1.05);
+  box-shadow: 0 6px 25px rgba(240, 98, 146, 0.6);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .level3-title {
+    font-size: 1.2rem;
+    top: 0.6rem;
+  }
+
+  .level3-subtitle {
+    top: 2.5rem;
+    font-size: 0.8rem;
+  }
+
+  .level3-progress {
+    top: 4rem;
+    font-size: 0.7rem;
+  }
+
+  .heart-outline-svg {
+    top: 12%;
+    left: 8%;
+    width: 84%;
+    height: 70%;
+  }
+
+  .floating-word {
+    font-size: 0.9rem;
+    padding: 0.35rem 0.7rem;
+  }
+
+  .gift-box {
+    width: 100px;
+    height: 85px;
+  }
+
+  .gift-body {
+    width: 100px;
+    height: 65px;
+  }
+
+  .gift-lid {
+    width: 116px;
+    height: 28px;
+    left: -8px;
+  }
+
+  .gift-ribbon-v, .gift-lid-ribbon {
+    width: 12px;
+  }
+
+  .gift-ribbon-h {
+    height: 12px;
+  }
+
+  .gift-message {
+    font-size: 0.95rem;
+    padding: 0 1rem;
+  }
+
+  #level3-restart {
+    bottom: 1.2rem;
+    font-size: 0.95rem;
+    padding: 0.7rem 1.5rem;
+  }
+}

@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+logs/**
+!logs/.gitkeep
+.DS_Store
+*.log
+.env
+# Ignore photo files but track the README and folder structure
+photos/**
+!photos/README.md
+!photos/*/
+photos/*/*
+!photos/*/.gitkeep
+data.json

@@ -1,0 +1,98 @@
+{
+  "siteName": "Your Site Name",
+  "level1": {
+    "name": "Level 1 Name",
+    "title": "Level 1 Title",
+    "subtitle": "Level 1 subtitle text",
+    "sparkles": [
+      {
+        "id": "s1",
+        "xPercent": 0.25,
+        "yPercent": 0.4,
+        "radius": 30,
+        "label": "Caption for sparkle 1",
+        "photo": "s1.jpg"
+      },
+      {
+        "id": "s2",
+        "xPercent": 0.7,
+        "yPercent": 0.3,
+        "radius": 30,
+        "label": "Caption for sparkle 2",
+        "photo": "s2.jpg"
+      },
+      {
+        "id": "s3",
+        "xPercent": 0.5,
+        "yPercent": 0.65,
+        "radius": 30,
+        "label": "Caption for sparkle 3",
+        "photo": "s3.jpg"
+      },
+      {
+        "id": "s4",
+        "xPercent": 0.15,
+        "yPercent": 0.75,
+        "radius": 30,
+        "label": "Caption for sparkle 4",
+        "photo": "s4.jpg"
+      },
+      {
+        "id": "s5",
+        "xPercent": 0.8,
+        "yPercent": 0.6,
+        "radius": 30,
+        "label": "Caption for sparkle 5",
+        "photo": "s5.jpg"
+      },
+      {
+        "id": "s6",
+        "xPercent": 0.4,
+        "yPercent": 0.2,
+        "radius": 30,
+        "label": "Caption for sparkle 6",
+        "photo": "s6.jpg"
+      }
+    ],
+    "ctaText": "CTA button text"
+  },
+  "level2": {
+    "name": "Level 2 Name",
+    "title": "Level 2 Title",
+    "subtitle": "Level 2 subtitle text",
+    "ctaText": "CTA button text",
+    "pairs": [
+      { "id": "p1", "date": "Mon YYYY", "emoji": "🏞️", "caption": "Caption for photo p1", "photo": "p1.jpg" },
+      { "id": "p2", "date": "Mon YYYY", "emoji": "🏔️", "caption": "Caption for photo p2", "photo": "p2.jpg" },
+      { "id": "p3", "date": "Mon YYYY", "emoji": "💃", "caption": "Caption for photo p3", "photo": "p3.jpg" },
+      { "id": "p4", "date": "Mon YYYY", "emoji": "🌊", "caption": "Caption for photo p4", "photo": "p4.jpg" },
+      { "id": "p5", "date": "Mon YYYY", "emoji": "😼", "caption": "Caption for photo p5", "photo": "p5.jpg" },
+      { "id": "p6", "date": "Mon YYYY", "emoji": "🏖️", "caption": "Caption for photo p6", "photo": "p6.jpg" },
+      { "id": "p7", "date": "Mon YYYY", "emoji": "🌮", "caption": "Caption for photo p7", "photo": "p7.jpg" },
+      { "id": "p8", "date": "Mon YYYY", "emoji": "💌", "caption": "Caption for photo p8", "photo": "p8.jpg" },
+      { "id": "p9", "date": "Mon YYYY", "emoji": "☔︎", "caption": "Caption for photo p9", "photo": "p9.jpg" }
+    ]
+  },
+  "level3": {
+    "name": "Level 3 Name",
+    "title": "Level 3 Title",
+    "subtitle": "Level 3 subtitle text",
+    "keywords": [
+      { "id": "w1",  "word": "Keyword 1" },
+      { "id": "w2",  "word": "Keyword 2" },
+      { "id": "w3",  "word": "Keyword 3" },
+      { "id": "w4",  "word": "Keyword 4" },
+      { "id": "w5",  "word": "Keyword 5" },
+      { "id": "w6",  "word": "Keyword 6" },
+      { "id": "w7",  "word": "Keyword 7" },
+      { "id": "w8",  "word": "Keyword 8" },
+      { "id": "w9",  "word": "Keyword 9" },
+      { "id": "w10", "word": "Keyword 10" },
+      { "id": "w11", "word": "Keyword 11" },
+      { "id": "w12", "word": "Keyword 12" },
+      { "id": "w13", "word": "Keyword 13" },
+      { "id": "w14", "word": "Keyword 14" },
+      { "id": "w15", "word": "Keyword 15" }
+    ]
+  }
+}

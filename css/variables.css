@@ -1,0 +1,35 @@
+:root {
+  /* Colors — romantic baby pink palette */
+  --color-primary: #e75480;
+  --color-primary-light: #f48fb1;
+  --color-accent: #f06292;
+  --color-accent-light: #f8bbd0;
+  --color-warm: #fce4ec;
+  --color-fog: rgba(180, 80, 120, 0.7);
+  --color-bg-dark: #ffeef5;
+  --color-bg-mid: #ffd6e7;
+  --color-text: #5a1a35;
+  --color-text-muted: rgba(90, 26, 53, 0.65);
+  --color-heart: #e75480;
+  --color-sparkle-glow: rgba(244, 143, 177, 0.6);
+  --color-cta-bg: linear-gradient(135deg, var(--color-accent), var(--color-primary));
+
+  /* Fonts */
+  --font-display: 'Georgia', 'Times New Roman', serif;
+  --font-body: 'Georgia', 'Times New Roman', serif;
+
+  /* Z-index layers */
+  --z-background: 1;
+  --z-canvas: 10;
+  --z-overlay: 20;
+  --z-sparkle: 30;
+  --z-hearts: 40;
+  --z-ui: 50;
+  --z-cta: 60;
+
+  /* Timing */
+  --transition-fast: 0.2s;
+  --transition-normal: 0.4s;
+  --transition-slow: 0.8s;
+  --transition-glacial: 1.5s;
+}
